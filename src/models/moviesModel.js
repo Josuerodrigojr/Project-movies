@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
-const UserSchema = new mongoose.Schema({
+const MovieSchema = new mongoose.Schema({
     title:{
         type:'String',
         required: true
@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
 
 });
 
-UserSchema.plugin(mongoosePaginate);
+MovieSchema.plugin(mongoosePaginate);
 
 
-module.exports = mongoose.model('Movie', UserSchema);
+module.exports = mongoose.model('Movie', MovieSchema);
