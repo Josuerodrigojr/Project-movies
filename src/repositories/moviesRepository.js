@@ -20,9 +20,8 @@ const deleteMovie = async(title)=>{
     return response
 }
 
-const updateMovie = async(title, payload)=>{
-    console.log('titulo e corpo',title, payload)
-    const response = await movies.findOneAndUpdate({title:title}, payload) 
+const updateMovie = async(id, payload)=>{
+    const response = await movies.findByIdAndUpdate(id, payload)
     console.log('Response ->>>', response)
 
     return response

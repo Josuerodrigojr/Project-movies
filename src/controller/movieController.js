@@ -8,8 +8,7 @@ const createMovie = async (req, res) => {
   }
 
   const viewMovie = async(req,res) =>{
-    const movie = req.body
-    const response = await movieService.getMovie(movie);
+    const response = await movieService.getMovie();
     return res.status(response.statusCode).json(response.data)
 
   }
@@ -22,9 +21,9 @@ const createMovie = async (req, res) => {
   }
 
   const updateMovie = async(req,res)=>{
-    const title = req.params.title;
+    const id = req.params.id;
     const payload = req.body;
-    const response = movieService.updateMovie(title, payload);
+    const response = await movieService.updateMovie(id, payload);
     return res.status(response.statusCode).json(response.data)
   }
 

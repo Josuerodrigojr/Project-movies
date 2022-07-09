@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --force-exit",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage --force-exit",
     "dev": "nodemon --inspect src/server.js"
   },
   "keywords": [],
@@ -12,6 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.1",
+    "jest": "^28.1.2",
+    "mockingoose": "^2.15.2",
     "mongoose": "^6.4.3",
     "mongoose-paginate": "^5.0.3",
     "require-dir": "^1.2.0"

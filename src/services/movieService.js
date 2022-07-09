@@ -7,11 +7,12 @@ const createMovie = async (payload)=>{
     try{
         const {title, year, director, genre, duration} = payload;
         let titleMovie = await moviesRepository.findMovie(title)
+        console.log('teste criar filme', titleMovie)
         
         if(titleMovie){
             return{
                 statusCode: 406,
-                data: 'Usuário já cadastrado!'
+                data: 'Filme já cadastrado!'
             }
         }
 
@@ -20,6 +21,7 @@ const createMovie = async (payload)=>{
 
 
         if(movie){
+            console.log('Estou dento do IF')
             return{
                 statusCode: 200,
                 data: "Filme registrado com sucesso!"
@@ -64,7 +66,21 @@ const getMovie = async()=>{
 const deleteMovie = async(title) =>{
     
    try{
-    const movie = await moviesRepository.deleteMovie(title);
+
+    let titleMovie = await moviesRepository.findMovie(title);
+
+
+    
+    if(!titleMovie){
+        return{
+            statusCode: 404,
+            data: 'O filme não existe!'
+        }
+    }
+
+
+
+    await moviesRepository.deleteMovie(title);
     return {
         statusCode: 200,
         data: "Usuário deletado com sucesso"
@@ -79,10 +95,18 @@ const deleteMovie = async(title) =>{
 }
 }
 
-const updateMovie = async(title,payload) =>{
+const updateMovie = async(id, payload) =>{
     try{
+        const {title, year, director, genre, duration} = payload;
 
-        const response = await moviesRepository.updateMovie(title, payload);
+        if(!title || !year || !director || !genre || !duration){
+            return{
+                statusCode: 400,
+                data: 'Revise as informações dos filmes!'
+            }
+        }    
+
+        await moviesRepository.updateMovie(id, payload);
 
         return {
             statusCode: 200,
