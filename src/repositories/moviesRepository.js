@@ -3,11 +3,12 @@ const movies = require('../models/moviesModel');
 
 
 const createMovie = async(movie)=>{
-    console.log('Estou no repositorio do create')
+
     return await movies.create(movie);
 }
 
 const findMovie = async(title)=>{
+
     return await movies.findOne({title:title})
 }
 
@@ -16,6 +17,7 @@ const setMovie = async()=>{
 }
 
 const deleteMovie = async(title)=>{
+
     const response = await movies.findOneAndDelete({title:title});
 
     return response

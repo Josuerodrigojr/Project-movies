@@ -9,7 +9,7 @@ const movieModel = require('../../src/models/moviesModel');
 
 
 // precisamos limpar
-jest.setTimeout(30000);
+jest.setTimeout(3000000);
 afterEach(() => {
   jest.restoreAllMocks();
 });
@@ -62,24 +62,123 @@ describe('Teste de Unidade do Usuário', () => {
 
   });
 
+  test('Teste para registro de um filme no banco de dados', async()=>{
+    let data = {
+      _id: "62c72c23b20f47aefdd5612f",
+      title: "Josué revolução",
+      year: "2010",
+      duration: "2h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+    }
+      
+//Monkando
+
+      mockingoose(movieModel).toReturn(null, 'findOne')
+      
+
+
+
+      const response = await movieService.createMovie(data);
+      console.log('RESPONSE', response)
+
+      expect(response.statusCode).toBe(200);
+
+  });
+
   test('Teste para erro no registro de um filme no banco de dados', async()=>{
     let data = {
-      title: "Lagoa 590",
+      _id: "62c72c23b20f47aefdd5612f",
+      title: "Josué revolução",
+      year: "2010",
+      duration: "2h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+    }
+      
+//Monkando
+
+      mockingoose(movieModel).toReturn(data, 'findOne')
+
+
+      const response = await movieService.createMovie(data);
+
+      expect(response.statusCode).toBe(406);
+
+  });
+
+  
+
+  test('Teste para tentar deletar o filme e não existir', async()=>{
+    let data = {
+      title: "Lagoa 5",
       year: "2010",
       duration: "1h:39min",
       director: "Sessão da tarde",
       genre: "Romance - Adolescente"
         
       }
-//Monkando
 
-      mockingoose(movieModel).toReturn(null, 'findOne')
+      // Monckando 
+
+      mockingoose(movieModel).toReturn(null,'findOne');
+
+      const response = await movieService.deleteMovie(data.title);
+
+      expect(response.statusCode).toBe(404)
+  })
+
+  test('Teste para deletar o filme', async()=>{
+    let data = {
+      _id: "62c72c23b20f47aefdd5612f",
+      title: "Josué revolução",
+      duration: "2h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+    }
+
+      // Monckando 
+
+      mockingoose(movieModel).toReturn(null,'findOne');
+
+      const response = await movieService.deleteMovie(data.title);
 
 
-      const response = await movieService.createMovie(data);
-      console.log("response", response)
-      expect(response.statusCode).toBe(406);
 
+      expect(response.statusCode).toBe(404)
+  });
+
+  test('Teste para alterar dados de um filme', async ()=>{
+    let data = {
+      _id: "62c72c23b20f47aefdd5612f",
+      title: "Josué revolução",
+      year: "2020",
+      duration: "2h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+    }
+      //Monkando
+      mockingoose(movieModel).toReturn(null, 'findByIdAndUpdate')
+
+      const response = await movieService.updateMovie(data._id, data)
+
+      expect(response.statusCode).toBe(200)
+  })
+
+  test('Teste para falta de informação no cadastro de um filme', async ()=>{
+    let data = {
+      _id: "62c72c23b20f47aefdd5612f",
+      title: "Josué revolução",
+      duration: "2h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+    }
+      //Monkando
+      mockingoose(movieModel).toReturn(null, 'findByIdAndUpdate')
+
+      const response = await movieService.updateMovie(data._id, data)
+
+      expect(response.statusCode).toBe(400)
   })
 
 });

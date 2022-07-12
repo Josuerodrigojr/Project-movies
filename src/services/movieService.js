@@ -7,7 +7,7 @@ const createMovie = async (payload)=>{
     try{
         const {title} = payload;
         let titleMovie = await moviesRepository.findMovie(title)
-
+        console.log('titulo', titleMovie)
         
         if(titleMovie){
             return{
@@ -16,22 +16,15 @@ const createMovie = async (payload)=>{
             }
         }
 
+        
 
-        let movie = await moviesRepository.createMovie(payload);
-
-
-        if(movie){
-            console.log('Estou dento do IF')
-            return{
+        titleMovie = await moviesRepository.createMovie(payload);
+        console.log('titulo 2', titleMovie)
+         return{
                 statusCode: 200,
-                data: movie
+                data: titleMovie
             }
-        } else {
-            return{
-                statusCode: 400,
-                data: 'Não foi possivel registrar o filme'
-            }
-        }
+
         
 
 
