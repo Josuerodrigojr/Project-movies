@@ -3,6 +3,7 @@ const movies = require('../models/moviesModel');
 
 
 const createMovie = async(movie)=>{
+    console.log('Estou no repositorio do create')
     return await movies.create(movie);
 }
 

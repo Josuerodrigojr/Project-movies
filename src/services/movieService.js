@@ -5,9 +5,9 @@ const moviesRepository = require('../repositories/moviesRepository');
 
 const createMovie = async (payload)=>{
     try{
-        const {title, year, director, genre, duration} = payload;
+        const {title} = payload;
         let titleMovie = await moviesRepository.findMovie(title)
-        console.log('teste criar filme', titleMovie)
+
         
         if(titleMovie){
             return{
@@ -24,7 +24,7 @@ const createMovie = async (payload)=>{
             console.log('Estou dento do IF')
             return{
                 statusCode: 200,
-                data: "Filme registrado com sucesso!"
+                data: movie
             }
         } else {
             return{
@@ -49,6 +49,14 @@ const getMovie = async()=>{
 
     try{
         let movie = await moviesRepository.setMovie();
+
+        if(!movie){
+            return{
+                statusCode: 404,
+                data: 'Não foi possivel verificar os filmes!'
+            }
+        }
+
         return {
             statusCode: 200,
             data: movie

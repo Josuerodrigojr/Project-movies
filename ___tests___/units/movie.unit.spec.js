@@ -1,63 +1,85 @@
-// Importando os pacotes 
+// instanciar a camada de service
+const movieService = require('../../src/services/movieService');
 
-const movieService = require('../../src/services/movieService') 
-const mockingoose = require('mockingoose');
+// instanciar o mockingoose
+const mockingoose = require('mockingoose')
 
-const movieModel = require("../../src/models/moviesModel");
+// instanciar a cama de model
+const movieModel = require('../../src/models/moviesModel');
 
-// Solictando para o jest para que possamos registrar no banco de dados virtual.
 
+// precisamos limpar
+jest.setTimeout(30000);
 afterEach(() => {
-    jest.restoreAllMocks()
+  jest.restoreAllMocks();
+});
+
+/*beforeEach(() => {
+});*/
+
+describe('Teste de Unidade do Usuário', () => {
+  test('Verificação do filme', async () => {
+
+    // preciso construir o meu objeto de entrada
+    let data = {
+      title: "Lagoa 590",
+      year: "2010",
+      duration: "1h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+        
+      }
+
+    // Forçando o retorno null para quando realizar o findOne ele não encontrar nada
+    // e seguir com o insert de usuário
+    mockingoose(movieModel).toReturn(data, 'find');
+
+    const response = await movieService.getMovie();
+    expect(response.statusCode).toBe(200);
+
+
   });
 
-  
+  test('Erro na verificação do filme', async () => {
 
-  describe('Testes unitários de filme', ()=>{
-    
-    test('Teste para cadastrar o filme no banco de dados', async ()=>{
+    // preciso construir o meu objeto de entrada
+    let data = {
+      title: "Lagoa 590",
+      year: "2010",
+      duration: "1h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
         
-        const data = {
-            title: "Lagoa 6",
-            year: "2010",
-            duration: "1h:39min",
-            director: "Sessão da tarde",
-            genre: "Romance - Adolescente"   
-        }
+      }
 
-        //Monkando
-        mockingoose(movieModel).toReturn(null, 'findOne');
+    // Forçando o retorno null para quando realizar o findOne ele não encontrar nada
+    // e seguir com o insert de usuário
+    mockingoose(movieModel).toReturn(null, 'find');
 
-        // Verificando se o usuário já existe no banco de dados
-        const response = await movieService.createMovie(data);
-        console.log('Estou no response ->', response)
-
-        expect(response.statusCode).toBe(200);
-        expect(response.data).toBe('Filme registrado com sucesso!')
+    const response = await movieService.getMovie();
+    expect(response.statusCode).toBe(404);
 
 
-    })
+  });
 
-    test('Teste para verificar se o filme existe no banco de dados', async ()=>{
-        const data = {
-            title: "Lagoa Amarela",
-            year: "2010",
-            duration: "1h:39min",
-            director: "Sessão da tarde",
-            genre: "Romance - Adolescente"   
-        }
+  test('Teste para erro no registro de um filme no banco de dados', async()=>{
+    let data = {
+      title: "Lagoa 590",
+      year: "2010",
+      duration: "1h:39min",
+      director: "Sessão da tarde",
+      genre: "Romance - Adolescente"
+        
+      }
+//Monkando
 
-        //Monkando
-        mockingoose(movieModel).toReturn(data, 'findOne');
-
-        // Verificando se o usuário já existe no banco de dados
-        const response = await movieService.createMovie(data);
-
-        expect(response.statusCode).toBe(406);
-        expect(response.data).toBe('Filme já cadastrado!')
+      mockingoose(movieModel).toReturn(null, 'findOne')
 
 
-    });
-
+      const response = await movieService.createMovie(data);
+      console.log("response", response)
+      expect(response.statusCode).toBe(406);
 
   })
+
+});
