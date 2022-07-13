@@ -7,7 +7,7 @@ const createMovie = async (payload)=>{
     try{
         const {title} = payload;
         let titleMovie = await moviesRepository.findMovie(title)
-        console.log('titulo', titleMovie)
+
         
         if(titleMovie){
             return{
@@ -18,11 +18,10 @@ const createMovie = async (payload)=>{
 
         
 
-        titleMovie = await moviesRepository.createMovie(payload);
-        console.log('titulo 2', titleMovie)
+        const movie = await moviesRepository.createMovie(payload);
          return{
                 statusCode: 200,
-                data: titleMovie
+                data: movie
             }
 
         
@@ -84,13 +83,13 @@ const deleteMovie = async(title) =>{
     await moviesRepository.deleteMovie(title);
     return {
         statusCode: 200,
-        data: "Usuário deletado com sucesso"
+        data: "Filme deletado com sucesso!"
     }
 
    } catch(error){
     return{
         statusCode: 500,
-        data: "Erro ao deletar o usuário"
+        data: "Erro ao deletar o filme"
     }
 
 }
@@ -111,14 +110,14 @@ const updateMovie = async(id, payload) =>{
 
         return {
             statusCode: 200,
-            data: 'Os dados do usuário foram alterados!'
+            data: 'Os dados do filme foram alterados!'
         }
 
 
     }catch(error){
         return{
             statusCode: 500,
-            data: "Erro ao deletar o usuário"
+            data: "Erro ao deletar o filme"
         }
 
     }

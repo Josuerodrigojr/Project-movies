@@ -1,3 +1,25 @@
+//---- Colinha ----
+
+// Testes unitários que devem, ser feitos
+// Get Movie
+// 1) Erro na verificação do filme x
+// 2) Verificação do filme x
+
+// Create Movie
+
+// 1) Verificar se o filme foi cadastrado x
+// 2) Registro do filme x
+
+// Delete Movie
+
+// 1) Verificar se o filme está cadastrado x
+// 2) Deletar o filme x
+
+// Update Movie
+
+// 1) Revisar as informações do filme x
+// 2) Alteração dos dados x
+//
 // instanciar a camada de service
 const movieService = require('../../src/services/movieService');
 
@@ -18,7 +40,7 @@ afterEach(() => {
 });*/
 
 describe('Teste de Unidade do Usuário', () => {
-  test('Verificação do filme', async () => {
+  test('Visualização dos filmes cadastrados no banco de dados', async () => {
 
     // preciso construir o meu objeto de entrada
     let data = {
@@ -38,9 +60,10 @@ describe('Teste de Unidade do Usuário', () => {
     expect(response.statusCode).toBe(200);
 
 
+
   });
 
-  test('Erro na verificação do filme', async () => {
+  test('Erro na visualização dos filmes cadastrados no banco de dados', async () => {
 
     // preciso construir o meu objeto de entrada
     let data = {
@@ -58,11 +81,12 @@ describe('Teste de Unidade do Usuário', () => {
 
     const response = await movieService.getMovie();
     expect(response.statusCode).toBe(404);
+    expect(response.data).toBe('Não foi possivel verificar os filmes!');
 
 
   });
 
-  test('Teste para registro de um filme no banco de dados', async()=>{
+  test.skip('Registro de um filme no banco de dados', async()=>{
     let data = {
       _id: "62c72c23b20f47aefdd5612f",
       title: "Josué revolução",
@@ -74,19 +98,20 @@ describe('Teste de Unidade do Usuário', () => {
       
 //Monkando
 
-      mockingoose(movieModel).toReturn(null, 'findOne')
+      mockingoose(movieModel).toReturn( data ,'create')
       
 
 
 
       const response = await movieService.createMovie(data);
-      console.log('RESPONSE', response)
+
 
       expect(response.statusCode).toBe(200);
 
+
   });
 
-  test('Teste para erro no registro de um filme no banco de dados', async()=>{
+  test('Erro no registro de um filme no banco de dados', async()=>{
     let data = {
       _id: "62c72c23b20f47aefdd5612f",
       title: "Josué revolução",
@@ -104,12 +129,13 @@ describe('Teste de Unidade do Usuário', () => {
       const response = await movieService.createMovie(data);
 
       expect(response.statusCode).toBe(406);
+      expect(response.data).toBe('Filme já cadastrado!');
 
   });
 
   
 
-  test('Teste para tentar deletar o filme e não existir', async()=>{
+  test('Tentar deletar o filme e não existir', async()=>{
     let data = {
       title: "Lagoa 5",
       year: "2010",
@@ -126,9 +152,10 @@ describe('Teste de Unidade do Usuário', () => {
       const response = await movieService.deleteMovie(data.title);
 
       expect(response.statusCode).toBe(404)
+      expect(response.data).toBe('O filme não existe!');
   })
 
-  test('Teste para deletar o filme', async()=>{
+  test('Deletar o filme', async()=>{
     let data = {
       _id: "62c72c23b20f47aefdd5612f",
       title: "Josué revolução",
@@ -139,16 +166,17 @@ describe('Teste de Unidade do Usuário', () => {
 
       // Monckando 
 
-      mockingoose(movieModel).toReturn(null,'findOne');
+      mockingoose(movieModel).toReturn(data,'findOne');
 
       const response = await movieService.deleteMovie(data.title);
 
 
 
-      expect(response.statusCode).toBe(404)
+      expect(response.statusCode).toBe(200)
+
   });
 
-  test('Teste para alterar dados de um filme', async ()=>{
+  test('Alterar dados de um filme', async ()=>{
     let data = {
       _id: "62c72c23b20f47aefdd5612f",
       title: "Josué revolução",
@@ -162,10 +190,11 @@ describe('Teste de Unidade do Usuário', () => {
 
       const response = await movieService.updateMovie(data._id, data)
 
-      expect(response.statusCode).toBe(200)
+      expect(response.statusCode).toBe(200);
+      expect(response.data).toBe('Os dados do filme foram alterados!');
   })
 
-  test('Teste para falta de informação no cadastro de um filme', async ()=>{
+  test('Falta de informação na alteração de um filme', async ()=>{
     let data = {
       _id: "62c72c23b20f47aefdd5612f",
       title: "Josué revolução",
@@ -178,7 +207,8 @@ describe('Teste de Unidade do Usuário', () => {
 
       const response = await movieService.updateMovie(data._id, data)
 
-      expect(response.statusCode).toBe(400)
+      expect(response.statusCode).toBe(400);
+      expect(response.data).toBe('Revise as informações dos filmes!');
   })
 
 });
