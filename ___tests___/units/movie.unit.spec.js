@@ -88,7 +88,6 @@ describe('Teste de Unidade do Usuário', () => {
 
   test.skip('Registro de um filme no banco de dados', async()=>{
     let data = {
-      _id: "62c72c23b20f47aefdd5612f",
       title: "Josué revolução",
       year: "2010",
       duration: "2h:39min",
@@ -98,7 +97,7 @@ describe('Teste de Unidade do Usuário', () => {
       
 //Monkando
 
-      mockingoose(movieModel).toReturn( data ,'create')
+      mockingoose(movieModel).toReturn(null ,'findOne')
       
 
 

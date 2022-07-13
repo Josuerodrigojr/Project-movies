@@ -7,6 +7,7 @@ const createMovie = async (payload)=>{
     try{
         const {title} = payload;
         let titleMovie = await moviesRepository.findMovie(title)
+        console.log('title', titleMovie)
 
         
         if(titleMovie){
@@ -18,10 +19,10 @@ const createMovie = async (payload)=>{
 
         
 
-        const movie = await moviesRepository.createMovie(payload);
+        await moviesRepository.createMovie(payload);
          return{
                 statusCode: 200,
-                data: movie
+                data: "Filme cadastrado com sucesso!"
             }
 
         
